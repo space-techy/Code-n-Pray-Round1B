@@ -16,9 +16,11 @@ COPY process_pdfs.py  /app/
 
 RUN python - <<'PY'
 from sentence_transformers import SentenceTransformer, CrossEncoder
+import nltk
 # cache dir = /app/models  (see ENV below)
 SentenceTransformer('sentence-transformers/gtr-t5-base').save('./models/sentence-transformers/gtr-t5-base')                   # base encoder
-CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2').save('./models/cross-encoder/ms-marco-MiniLM-L-6-v2')                        # reranker
+CrossEncoder('cross-encoder/ms-marco-MiniLM-L6-v2').save('./models/cross-encoder/ms-marco-MiniLM-L6-v2')                        # reranker
+nltk.download('punkt_tab')
 PY
 
 # ---------- environment ----------

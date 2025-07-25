@@ -172,7 +172,7 @@ def run_pipeline(cfg, pdf_dir: pathlib.Path, model_path:str,
         subsection_analysis=out_analysis
     )
 
-    print(f"[INFO] done in {time.time()-tic:.1f}s  –  kept {len(out_sections)} sections")
+    print(f"[INFO] done in {time.time()-tic:.1f}s")
     return result
 
 # -------- CLI --------
@@ -181,9 +181,9 @@ def main():
     ap.add_argument("--challenge_json", required=True, help="File location containing challenge 1B input json")
     ap.add_argument("--pdf_dir",      required=True, help="directory containing PDFs")
     ap.add_argument("--model_path",   default="./models/sentence-transformers/gtr-t5-base", help="model path")
-    ap.add_argument("--cross_model",  default="./models/cross-encoder/ms-marco-MiniLM-L-6-v2", help="cross model path")
+    ap.add_argument("--cross_model",  default="./models/cross-encoder/ms-marco-MiniLM-L6-v2", help="cross model path")
     ap.add_argument("--top_out",      type=int, default=15, help="max sections in output")
-    ap.add_argument("--output",          default="challenge1b_output.json", help="location to store output json")
+    ap.add_argument("--output",       required=True,default="challenge1b_output.json", help="location to store output json")
     args=ap.parse_args()
 
     cfg=json.loads(pathlib.Path(args.challenge_json).read_text(encoding="utf-8"))
@@ -192,8 +192,8 @@ def main():
                      cross_name=args.cross_model,
                      top_out=args.top_out)
 
-    pathlib.Path(args.out).write_text(json.dumps(res,indent=2,ensure_ascii=False),encoding="utf-8")
-    print(f"✓ wrote {args.out}")
+    pathlib.Path(args.output).write_text(json.dumps(res,indent=2,ensure_ascii=False),encoding="utf-8")
+    print(f"✓ wrote {args.output}")
 
 if __name__=="__main__":
     main()
